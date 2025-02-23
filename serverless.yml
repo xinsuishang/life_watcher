@@ -1,0 +1,49 @@
+# serverless.yml
+stage: ${env:STAGE}
+
+component: http # (必选) 组件名称
+name: life-watcher # 必选) 组件实例名称.
+
+inputs:
+  region: ap-beijing # 云函数所在区域
+  src: # 部署src下的文件代码，并打包成zip上传到bucket上
+    src: ./src/ # 本地需要打包的文件目录
+  faas: # 函数配置相关
+    runtime: Go1
+    type: web # 函数类型
+    name: life-watcher # 云函数名称
+    timeout: 10 # 超时时间，单位秒
+    memorySize: 64 # 内存大小，默认 512 MB
+    events:
+      - http:
+          parameters: 
+            qualifier: $DEFAULT
+            netConfig:
+              enableIntranet: true
+              enableExtranet: true
+    environments:
+      - key: TZ
+        value: Asia/Shanghai
+      # 通过action flow 设置的环境变量
+      - key: APP_CONFIG_SERVER_PORT
+        value: ${env:APP_CONFIG_SERVER_PORT}
+      - key: APP_CONFIG_SERVER_HOST
+        value: ${env:APP_CONFIG_SERVER_HOST}
+      - key: APP_CONFIG_DATABASE_DRIVER
+        value: ${env:APP_CONFIG_DATABASE_DRIVER}
+      - key: APP_CONFIG_DATABASE_HOST
+        value: ${env:APP_CONFIG_DATABASE_HOST}
+      - key: APP_CONFIG_DATABASE_PORT
+        value: ${env:APP_CONFIG_DATABASE_PORT}
+      - key: APP_CONFIG_DATABASE_USER
+        value: ${env:APP_CONFIG_DATABASE_USER}
+      - key: APP_CONFIG_DATABASE_PASSWORD
+        value: ${env:APP_CONFIG_DATABASE_PASSWORD}
+      - key: APP_CONFIG_DATABASE_NAME
+        value: ${env:APP_CONFIG_DATABASE_NAME}
+      - key: APP_CONFIG_DATABASE_TLS
+        value: ${env:APP_CONFIG_DATABASE_TLS}
+      - key: APP_CONFIG_LOG_PATH
+        value: ${env:APP_CONFIG_LOG_PATH}
+      - key: APP_CONFIG_PONG_TIME_VERSION
+        value: ${env:APP_CONFIG_PONG_TIME_VERSION}
