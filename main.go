@@ -22,8 +22,7 @@ func main() {
 	initComponents(h)
 
 	// 启动监控服务
-	monitorSvc := initMonitorService(h)
-	monitorSvc.Start()
+	// initMonitorService(h)
 
 	hlog.Info("服务启动完成")
 	h.Spin()
@@ -61,6 +60,8 @@ func initMonitorService(h *server.Hertz) *monitor.MonitorService {
 		hlog.Info("服务关闭，停止监控服务")
 		monitorSvc.Stop()
 	})
+
+	monitorSvc.Start()
 
 	return monitorSvc
 }
