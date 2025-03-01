@@ -52,5 +52,6 @@ jobs:
         APP_CONFIG_DATABASE_PASSWORD: ${{ secrets.APP_CONFIG_DATABASE_PASSWORD }}
         APP_CONFIG_DATABASE_NAME: ${{ secrets.APP_CONFIG_DATABASE_NAME }}
         APP_CONFIG_DATABASE_TLS: ${{ secrets.APP_CONFIG_DATABASE_TLS }}
+        APP_REQUEST_KEY: ${{  vars.APP_SCF_REQUEST_KEY }}
         APP_CONFIG_LOG_PATH: /tmp/logs
         APP_CONFIG_PONG_TIME_VERSION: ${{ github.event.head_commit.timestamp }}
