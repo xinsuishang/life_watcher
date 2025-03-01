@@ -47,3 +47,5 @@ inputs:
         value: ${env:APP_CONFIG_LOG_PATH}
       - key: APP_CONFIG_PONG_TIME_VERSION
         value: ${env:APP_CONFIG_PONG_TIME_VERSION}
+      - key: APP_REQUEST_KEY
+        value: ${env:APP_REQUEST_KEY}
