@@ -13,21 +13,21 @@ func JWTAuth() app.HandlerFunc {
 	return func(c context.Context, ctx *app.RequestContext) {
 		authHeader := string(ctx.Request.Header.Peek("Authorization"))
 		if authHeader == "" {
-			ctx.JSON(consts.StatusUnauthorized, utils.Error(401, "未授权访问"))
+			ctx.JSON(consts.StatusUnauthorized, utils.Error(ctx, 401, "未授权访问"))
 			ctx.Abort()
 			return
 		}
 
 		parts := strings.SplitN(authHeader, " ", 2)
 		if !(len(parts) == 2 && parts[0] == "Bearer") {
-			ctx.JSON(consts.StatusUnauthorized, utils.Error(401, "无效的认证格式"))
+			ctx.JSON(consts.StatusUnauthorized, utils.Error(ctx, 401, "无效的认证格式"))
 			ctx.Abort()
 			return
 		}
 
 		claims, err := utils.ParseToken(parts[1])
 		if err != nil {
-			ctx.JSON(consts.StatusUnauthorized, utils.Error(401, "无效的 token"))
+			ctx.JSON(consts.StatusUnauthorized, utils.Error(ctx, 401, "无效的 token"))
 			ctx.Abort()
 			return
 		}

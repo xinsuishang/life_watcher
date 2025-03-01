@@ -14,43 +14,43 @@ import (
 func HandleAddContact(ctx context.Context, c *app.RequestContext) {
 	var req contact.AddContactRequest
 	if err := c.BindAndValidate(&req); err != nil {
-		c.JSON(consts.StatusBadRequest, utils.Error(400, "无效的请求参数"))
+		c.JSON(consts.StatusBadRequest, utils.Error(c, 400, "无效的请求参数"))
 		return
 	}
 
 	_, err := service.NewContactService(ctx, c).AddContact(&req)
 	if err != nil {
-		c.JSON(consts.StatusInternalServerError, utils.Error(500, "添加联系人失败"))
+		c.JSON(consts.StatusInternalServerError, utils.Error(c, 500, "添加联系人失败"))
 		return
 	}
 
-	c.JSON(consts.StatusOK, utils.Success("ok"))
+	c.JSON(consts.StatusOK, utils.Success(c, "ok"))
 }
 
 // HandleGetContacts 处理获取联系人列表
 func HandleGetContacts(ctx context.Context, c *app.RequestContext) {
 	contacts, err := service.NewContactService(ctx, c).GetContacts()
 	if err != nil {
-		c.JSON(consts.StatusInternalServerError, utils.Error(500, "获取联系人列表失败"))
+		c.JSON(consts.StatusInternalServerError, utils.Error(c, 500, "获取联系人列表失败"))
 		return
 	}
 
-	c.JSON(consts.StatusOK, utils.Success(contacts))
+	c.JSON(consts.StatusOK, utils.Success(c, contacts))
 }
 
 // HandleDeleteContact 处理删除联系人
 func HandleDeleteContact(ctx context.Context, c *app.RequestContext) {
 	var req contact.DeleteContactRequest
 	if err := c.BindAndValidate(&req); err != nil {
-		c.JSON(consts.StatusBadRequest, utils.Error(400, "无效的请求参数"))
+		c.JSON(consts.StatusBadRequest, utils.Error(c, 400, "无效的请求参数"))
 		return
 	}
 
 	err := service.NewContactService(ctx, c).DeleteContact(req.ContactID)
 	if err != nil {
-		c.JSON(consts.StatusInternalServerError, utils.Error(500, "删除联系人失败"))
+		c.JSON(consts.StatusInternalServerError, utils.Error(c, 500, "删除联系人失败"))
 		return
 	}
 
-	c.JSON(consts.StatusOK, utils.Success("ok"))
+	c.JSON(consts.StatusOK, utils.Success(c, "ok"))
 }

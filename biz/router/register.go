@@ -5,6 +5,7 @@ import (
 	"lonely-monitor/biz/router/contact"
 	"lonely-monitor/biz/router/user"
 	"lonely-monitor/pkg/config"
+	"lonely-monitor/pkg/utils"
 	"time"
 
 	"github.com/cloudwego/hertz/pkg/app"
@@ -23,7 +24,7 @@ func Register(r *server.Hertz) {
 		version = time.Now().Format("20060102150405")
 	}
 	r.GET("/ping", func(ctx context.Context, c *app.RequestContext) {
-		c.JSON(consts.StatusOK, map[string]string{"message": version})
+		c.JSON(consts.StatusOK, utils.Success(c, version))
 	})
 
 	// 注册用户模块路由
