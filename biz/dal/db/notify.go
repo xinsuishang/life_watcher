@@ -22,7 +22,7 @@ func CreateNotifyRecord(record *NotifyRecord) error {
 }
 
 // UpdateNotifyRecord 更新通知记录
-func UpdateNotifyRecord(id int64, updates map[string]interface{}) error {
+func UpdateNotifyRecord(id int64, updates map[string]any) error {
 	return GetDB().Model(&NotifyRecord{}).Where("id = ?", id).Updates(updates).Error
 }
 

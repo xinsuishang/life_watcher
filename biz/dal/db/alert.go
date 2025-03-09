@@ -18,7 +18,7 @@ func CreateAlertRecord(record *AlertRecord) error {
 }
 
 // UpdateAlertRecord 更新预警记录
-func UpdateAlertRecord(id int64, updates map[string]interface{}) error {
+func UpdateAlertRecord(id int64, updates map[string]any) error {
 	return GetDB().Model(&AlertRecord{}).Where("id = ?", id).Updates(updates).Error
 }
 

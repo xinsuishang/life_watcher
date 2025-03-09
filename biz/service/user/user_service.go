@@ -14,13 +14,13 @@ import (
 )
 
 type UserService struct {
-	ctx context.Context
-	c   *app.RequestContext
+	c   context.Context
+	ctx *app.RequestContext
 }
 
 // NewUserService create user service
-func NewUserService(ctx context.Context, c *app.RequestContext) *UserService {
-	return &UserService{ctx: ctx, c: c}
+func NewUserService(c context.Context, ctx *app.RequestContext) *UserService {
+	return &UserService{c: c, ctx: ctx}
 }
 
 // UserRegister register user return user id.
@@ -87,26 +87,26 @@ func (s *UserService) UserCheckIn(userID int64) error {
 	}
 	if err := tx.Create(checkIn).Error; err != nil {
 		tx.Rollback()
-		hlog.CtxErrorf(s.ctx, "创建签到记录失败，错误: %v", err)
+		hlog.CtxErrorf(s.c, "创建签到记录失败，错误: %v", err)
 		return err
 	}
 
 	// 更新预警记录
 	if err := tx.Model(&db.AlertRecord{}).
 		Where("user_id = ?", userID).
-		Updates(map[string]interface{}{
+		Updates(map[string]any{
 			"last_check_in_time": now,
 			"alert_time":         now.Add(24 * time.Hour), // 延后24小时
 			"status":             0,                       // 重置通知状态
 			"updated_at":         now,
 		}).Error; err != nil {
 		tx.Rollback()
-		hlog.CtxErrorf(s.ctx, "更新预警记录失败，错误: %v", err)
+		hlog.CtxErrorf(s.c, "更新预警记录失败，错误: %v", err)
 		return err
 	}
 
 	if err := tx.Commit().Error; err != nil {
-		hlog.CtxErrorf(s.ctx, "提交事务失败，错误: %v", err)
+		hlog.CtxErrorf(s.c, "提交事务失败，错误: %v", err)
 		return err
 	}
 

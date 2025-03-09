@@ -4,6 +4,8 @@ import (
 	"os"
 	"sync"
 
+	"lonely-monitor/pkg/consts"
+
 	"github.com/cloudwego/hertz/pkg/app"
 )
 
@@ -12,15 +14,15 @@ var (
 	once       sync.Once
 )
 
-func getTraceId(c *app.RequestContext) string {
-	return c.Request.Header.Get(getRequestKey())
+func GetTraceId(c *app.RequestContext) string {
+	return c.Request.Header.Get(GetRequestKey())
 }
 
-func getRequestKey() string {
+func GetRequestKey() string {
 	once.Do(func() {
-		requestKey = os.Getenv("APP_REQUEST_KEY")
+		requestKey = os.Getenv(consts.RequestId)
 		if requestKey == "" {
-			requestKey = "Request-Id"
+			requestKey = "X-Request-ID"
 		}
 	})
 	return requestKey

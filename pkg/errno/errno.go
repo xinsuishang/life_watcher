@@ -3,6 +3,10 @@ package errno
 import "fmt"
 
 const (
+	HttpSuccess = 200
+)
+
+const (
 	SuccessCode    = 0
 	ParamErrCode   = 400
 	AuthErrCode    = 401

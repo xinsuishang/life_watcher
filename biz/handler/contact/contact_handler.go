@@ -4,53 +4,53 @@ import (
 	"context"
 	"lonely-monitor/biz/model/contact"
 	service "lonely-monitor/biz/service/contact"
+	"lonely-monitor/pkg/errno"
 	"lonely-monitor/pkg/utils"
 
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/protocol/consts"
 )
 
 // HandleAddContact 处理添加联系人
-func HandleAddContact(ctx context.Context, c *app.RequestContext) {
+func HandleAddContact(c context.Context, ctx *app.RequestContext) {
 	var req contact.AddContactRequest
-	if err := c.BindAndValidate(&req); err != nil {
-		c.JSON(consts.StatusBadRequest, utils.Error(c, 400, "无效的请求参数"))
+	if err := ctx.BindAndValidate(&req); err != nil {
+		ctx.JSON(errno.HttpSuccess, utils.Error(ctx, errno.ParamErrCode, "无效的请求参数"))
 		return
 	}
 
-	_, err := service.NewContactService(ctx, c).AddContact(&req)
+	_, err := service.NewContactService(c, ctx).AddContact(&req)
 	if err != nil {
-		c.JSON(consts.StatusInternalServerError, utils.Error(c, 500, "添加联系人失败"))
+		ctx.JSON(errno.HttpSuccess, utils.Error(ctx, errno.ServiceErrCode, "添加联系人失败"))
 		return
 	}
 
-	c.JSON(consts.StatusOK, utils.Success(c, "ok"))
+	ctx.JSON(errno.HttpSuccess, utils.Success(ctx, "ok"))
 }
 
 // HandleGetContacts 处理获取联系人列表
-func HandleGetContacts(ctx context.Context, c *app.RequestContext) {
-	contacts, err := service.NewContactService(ctx, c).GetContacts()
+func HandleGetContacts(c context.Context, ctx *app.RequestContext) {
+	contacts, err := service.NewContactService(c, ctx).GetContacts()
 	if err != nil {
-		c.JSON(consts.StatusInternalServerError, utils.Error(c, 500, "获取联系人列表失败"))
+		ctx.JSON(errno.HttpSuccess, utils.Error(ctx, errno.ServiceErrCode, "获取联系人列表失败"))
 		return
 	}
 
-	c.JSON(consts.StatusOK, utils.Success(c, contacts))
+	ctx.JSON(errno.HttpSuccess, utils.Success(ctx, contacts))
 }
 
 // HandleDeleteContact 处理删除联系人
-func HandleDeleteContact(ctx context.Context, c *app.RequestContext) {
+func HandleDeleteContact(c context.Context, ctx *app.RequestContext) {
 	var req contact.DeleteContactRequest
-	if err := c.BindAndValidate(&req); err != nil {
-		c.JSON(consts.StatusBadRequest, utils.Error(c, 400, "无效的请求参数"))
+	if err := ctx.BindAndValidate(&req); err != nil {
+		ctx.JSON(errno.HttpSuccess, utils.Error(ctx, errno.ParamErrCode, "无效的请求参数"))
 		return
 	}
 
-	err := service.NewContactService(ctx, c).DeleteContact(req.ContactID)
+	err := service.NewContactService(c, ctx).DeleteContact(req.ContactID)
 	if err != nil {
-		c.JSON(consts.StatusInternalServerError, utils.Error(c, 500, "删除联系人失败"))
+		ctx.JSON(errno.HttpSuccess, utils.Error(ctx, errno.ServiceErrCode, "删除联系人失败"))
 		return
 	}
 
-	c.JSON(consts.StatusOK, utils.Success(c, "ok"))
+	ctx.JSON(errno.HttpSuccess, utils.Success(ctx, "ok"))
 }

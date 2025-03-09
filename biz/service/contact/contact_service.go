@@ -11,13 +11,13 @@ import (
 )
 
 type ContactService struct {
-	ctx context.Context
-	c   *app.RequestContext
+	c   context.Context
+	ctx *app.RequestContext
 }
 
 // NewContactService create contact service
-func NewContactService(ctx context.Context, c *app.RequestContext) *ContactService {
-	return &ContactService{ctx: ctx, c: c}
+func NewContactService(c context.Context, ctx *app.RequestContext) *ContactService {
+	return &ContactService{c: c, ctx: ctx}
 }
 
 // AddContact 添加联系人
@@ -49,7 +49,7 @@ func (s *ContactService) GetContacts() ([]contact.Response, error) {
 	for _, c := range contacts {
 		decryptedValue, err := utils.DecryptContact(c.EncryptedValue)
 		if err != nil {
-			hlog.CtxErrorf(s.ctx, "解密联系方式失败，contact_id: %d, 错误: %v", c.ID, err)
+			hlog.CtxErrorf(s.c, "解密联系方式失败，contact_id: %d, 错误: %v", c.ID, err)
 			continue
 		}
 
